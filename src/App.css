@@ -1,0 +1,107 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.input-box:focus {
+  box-shadow: 0 0 0 .1rem rgba(17 ,71 ,135, .25);
+}
+
+.swals-show {
+  animation: swals-show .3s;
+}
+
+@keyframes swals-show {
+  0% {
+    transform: scale(.7);
+  }
+
+  45% {
+    transform: scale(1.05);
+  }
+
+  80% {
+    transform: scale(.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.shadow-default {
+  --tw-shadow: 0px 8px 13px -3px rgba(0, 0, 0, 0.07);
+  -webkit-box-shadow: var(--tw-shadow);
+  box-shadow: var(--tw-shadow);
+}
+
+
+/* شريط التمرير لجميع العناصر القابلة للتمرير */
+*::-webkit-scrollbar {
+  width: 7px; 
+  height: 7px; 
+
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px; /* إضافة زوايا مستديرة */
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #6c757d;
+  border-radius: 10px;
+  min-height: 20px; /* الحد الأدنى للطول */
+  max-height: 20px; /* الحد الأقصى للطول */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #495057; /* لون عند التمرير */
+}
+.badge {
+  display: inline-block;
+  padding: 6.25px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 6.25px;
+}
