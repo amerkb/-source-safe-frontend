@@ -3,7 +3,7 @@ const token = () => {
     if (localStorage.hasOwnProperty("user")) {
         return `Bearer ${JSON.parse(localStorage.getItem("user")).token}`
     }
-    return "iJhcmVlakBnbWFpbC5jb20iLCJpYXQiOjE3MzU5MzgzMjUsImV4cCI6MTczNjAyNDcyNX0.COfhEqvGbmyox-HvBX-CWv5FS1rK1IMwN9OEtvvRqyY"
+    return ""
 }
 const handleUnauthorizedError = () => {
 
@@ -28,7 +28,7 @@ export const Helper = {
         try {
             const response = await axios.get(url, hasToken ? {
                 headers: {
-                    Authorization:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmVlakBnbWFpbC5jb20iLCJpYXQiOjE3MzU5Mzk5OTksImV4cCI6MTczNjAyNjM5OX0.Co1wsg5SG454585XxJfklMT0QgH3g9JjwuokW2qEZuI",
+                    Authorization:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmVlakBnbWFpbC5jb20iLCJpYXQiOjE3MzYzMjA5MjAsImV4cCI6MTczNjQwNzMyMH0.pp8QNfC2OPv6D6M2V6lyw7_l_5mLbF9vdD21I-3ICJA",
                     //  ApiKey: "acO+4JTx8lmZmOo4qZemnKS7JufhcyviuvUaz5VL7faQo60isZFx/sf7FbtNs1FlkLG03/HsIs+6odEwY/30HrST7JZaDsAmTMrvB0qm25LqxoZquKThjgW9S6NCX8lWWLhp6mUOCBfe86B0dcgEhe9SXgmFVqA8UvzZ+G+YC8Y="
                 },
                 params: data ? data : {}

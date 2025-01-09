@@ -1,15 +1,9 @@
 const user_id = JSON.parse(localStorage.getItem("user"))?.user_id
-const Host = "http://127.0.0.1:8080"
+const Host = "http://localhost:8080"
 export const api_Routes = {
     Auth: {
-        login: `${Host}/user/login`,
-        add: `${Host}/user/register`,
-        verifyaccount: `${Host}/user/register/verification`,
-        Resendverifyaccount: `${Host}/user/register/resendVerification`,
-        SendEmailForForgetPassword: `${Host}/user/forgetPassword/step1`,
-        VerficationPasswordByEmail: `${Host}/user/forgetPassword/step2`,
-        ResetPassword: `${Host}/user/forgetPassword/step3`,
-        ForgetPasswordResend: `${Host}/user/forgetPassword/resendVerification`,
+        login: `${Host}/auth/login`,
+        register: `${Host}/auth/signup`,
     },
 
     Search: {

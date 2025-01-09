@@ -1,46 +1,45 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Field from "../UI/Form/Input/Field";
-import { setFiledLogin } from "../Redux/AlertReducer";
 import { Helper } from "../tools/Helper";
 import { api_Routes } from "../tools/api_Routes";
+import { useNavigate } from "react-router-dom";
 
-function Login() {
+function Register() {
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [error, setError] = useState(""); // State for error messages
-  const [loading, setLoading] = useState(false); // State for button loader
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true); // Show loader
-    setError(""); // Clear previous errors
+    setLoading(true);
+    setError("");
+    setSuccess("");
 
     const formData = new FormData(event.target);
     const inputData = {
+      fullName: formData.get("FullName"),
       email: formData.get("Email"),
       password: formData.get("Password"),
     };
 
     try {
       const { response, message } = await Helper.Post({
-        url: api_Routes.Auth.login,
+        url: api_Routes.Auth.register,
         data: inputData,
       });
 
       if (response) {
-        localStorage.setItem("token", response.token); 
-        navigate("/Home"); 
-        dispatch(setFiledLogin(false)); 
+        navigate("/"); 
+        setSuccess("Registration successful! Please log in.");
       } else {
-        throw new Error(message || "Invalid credentials. Please try again.");
+        throw new Error(message || "Registration failed. Please try again.");
       }
     } catch (error) {
-      setError("Login Failed!");
-      dispatch(setFiledLogin(true)); // Update Redux state for login failure
+      setError("Registration Failed!");
     } finally {
-      setLoading(false); // Hide loader
+      setLoading(false);
     }
   };
 
@@ -48,13 +47,20 @@ function Login() {
     <div className="flex h-screen bg-gray-100">
       <div className="m-auto p-6 bg-white rounded-lg shadow-lg w-full max-w-xl">
         <h3 className="text-2xl font-semibold text-center mb-2">
-          Login to Group Chat
+          Register for Group Chat
         </h3>
         <p className="text-center text-gray-600 mb-6">
-          Please enter your email and password
+          Please fill in the details to create an account
         </p>
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+        {success && <div className="text-green-500 text-center mb-4">{success}</div>}
         <form onSubmit={handleSubmit} className="space-y-4">
+          <Field
+            label="Full Name"
+            placeholder="Enter your full name"
+            name="FullName"
+            type="text"
+          />
           <Field
             label="Email"
             placeholder="Enter your email"
@@ -69,10 +75,11 @@ function Login() {
           />
           <button
             type="submit"
-            className={`w-full py-2 px-4 rounded-lg text-white font-semibold transition duration-200 ${loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
-              }`}
+            className={`w-full py-2 px-4 rounded-lg text-white font-semibold transition duration-200 ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
+            }`}
             disabled={loading}
           >
             {loading ? (
@@ -97,19 +104,17 @@ function Login() {
                     d="M4 12a8 8 0 018-8v8H4z"
                   ></path>
                 </svg>
-                Logging in...
+                Registering...
               </div>
             ) : (
-              "Login"
+              "Register"
             )}
           </button>
-
-
         </form>
         <p className="text-center text-gray-500 mt-4">
-          Don’t have an account?{" "}
-          <a href="/register" className="text-blue-500 hover:underline">
-            Register here
+          Already have an account?{" "}
+          <a href="/" className="text-blue-500 hover:underline">
+            Login here
           </a>
         </p>
       </div>
@@ -117,5 +122,4 @@ function Login() {
   );
 }
 
-export default Login;
-
+export default Register;

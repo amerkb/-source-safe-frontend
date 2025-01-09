@@ -15,6 +15,14 @@ function App() {
       <Router>
         <Routes>
           <Route
+            path="/"
+            element={<DashboardLayout content="login" />}
+          />
+          <Route
+            path="/Register"
+            element={<DashboardLayout content="Register" />}
+          />
+          <Route
             path="/Dashboard"
             element={<DashboardLayout content="Dashboard" />}
           />
@@ -26,12 +34,7 @@ function App() {
             path="/GroupDetails"
             element={<DashboardLayout content="GroupDetails" />}
           />
-          <Route
-            path=""
-            element={
-              <Login />
-            }
-          />
+  
         </Routes>
       </Router>
     </div>

@@ -6,28 +6,7 @@ import { Helper } from "../../tools/Helper";
 import { api_Routes } from "../../tools/api_Routes";
 
 const GroupTable = () => {
-  const [myGroups, setMyGroups] = useState([]);
-  const [loading, setLoader] = useState(false);
-  const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    setLoader(true);
-    getMyGroups();
-  }, []);
-
-  const getMyGroups = async () => {
-    const { response, message } = await Helper.Get({
-      url: api_Routes.Groups.myGroups,
-      hasToken: true,
-    });
-
-    if (response) {
-
-    } else {
-      console.error(message);
-    }
-    setLoader(false);
-  };
 
 
 
