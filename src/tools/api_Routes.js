@@ -30,6 +30,11 @@ export const api_Routes = {
     },
     Groups: {
         myGroups: `${Host}/groups/myGroups`,
-        add: `${Host}/offers`,
+        add: `${Host}/groups/create`,
+        user: `${Host}/groups/getUsersByGroupId`,
+    },
+    User: {
+        allUser: `${Host}/users/getUsers`,
+        AddUser:`${Host}/groups/addMember`,
     }
 }

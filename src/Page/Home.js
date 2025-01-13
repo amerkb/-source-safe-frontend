@@ -1,11 +1,13 @@
 import React from "react";
-import GroupList from "../UI/Groups/GroupList";
-
+import PanelHead from "../UI/Panel/PanelHead";
+import PanelBody from "../UI/Panel/PanelBody";
+import GroupTable from "../UI/Groups/GroupTable";
 
 const Home = () => {
   return (
     <div>
-      <GroupList />
+     <PanelHead title='My Groups'/>
+     <PanelBody content={<GroupTable/>} />
     </div>
   );
 };

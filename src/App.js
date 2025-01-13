@@ -31,7 +31,7 @@ function App() {
             element={<DashboardLayout content="Home" />}
           />
           <Route
-            path="/GroupDetails"
+            path="/GroupDetails/:id/:title"
             element={<DashboardLayout content="GroupDetails" />}
           />
   

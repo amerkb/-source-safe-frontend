@@ -1,9 +1,9 @@
 import axios from "axios";
 const token = () => {
-    if (localStorage.hasOwnProperty("user")) {
-        return `Bearer ${JSON.parse(localStorage.getItem("user")).token}`
+    if (localStorage.getItem("token")) {
+        return `Bearer ${localStorage.getItem("token")}`
     }
-    return ""
+    return `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmVlakBnbWFpbC5jb20iLCJpYXQiOjE3MzY1NDIzNDEsImV4cCI6MTczNjYyODc0MX0.6tLypRwy8_vxaLeqfYDfZoyPEbAQhWtvq2ncH2fMGxk`
 }
 const handleUnauthorizedError = () => {
 
@@ -28,8 +28,7 @@ export const Helper = {
         try {
             const response = await axios.get(url, hasToken ? {
                 headers: {
-                    Authorization:"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmVlakBnbWFpbC5jb20iLCJpYXQiOjE3MzYzMjA5MjAsImV4cCI6MTczNjQwNzMyMH0.pp8QNfC2OPv6D6M2V6lyw7_l_5mLbF9vdD21I-3ICJA",
-                    //  ApiKey: "acO+4JTx8lmZmOo4qZemnKS7JufhcyviuvUaz5VL7faQo60isZFx/sf7FbtNs1FlkLG03/HsIs+6odEwY/30HrST7JZaDsAmTMrvB0qm25LqxoZquKThjgW9S6NCX8lWWLhp6mUOCBfe86B0dcgEhe9SXgmFVqA8UvzZ+G+YC8Y="
+                    Authorization: token(),
                 },
                 params: data ? data : {}
 
@@ -140,58 +139,62 @@ export const Helper = {
     },
     Post: async ({ url, hasToken, data = null }) => {
         try {
-            const response = await axios.post(url, data, hasToken ? {
-                headers: {
+          const response = await axios.post(
+            url,
+            data,
+            hasToken
+              ? {
+                  headers: {
                     Authorization: token(),
-                    // ApiKey: "your_api_key_here"
+                  },
                 }
-            } : {
-                headers: {
-                    // ApiKey: "your_api_key_here"
-                }
-            });
-
-            if (response.data.success && response.status === 200) {
-                return {
-                    message: response.data.message,
-                    response: response.data
-                };
-            } else {
-                return {
-                    message: response.data.message,
-                    response: response.data,
-                };
-            }
-
+              : {}
+          );
+      
+          if (response.data.success && response.status === 200) {
+            return {
+              message: response.data.message,
+              response: response.data,
+            };
+          } else {
+            return {
+              message: response.data.message || "An unknown error occurred.",
+              response: response.data,
+            };
+          }
         } catch (err) {
-            console.log(err);
-
-            if (err.response) {
-                const err_response = err.response.data;
-
-                // Handle specific status codes
-                if (err.response.status === 403) {
-                    return { message: "Access Forbidden: You do not have permission to access this resource." };
-                } else if (err.response.status === 401) {
-                    return handleUnauthorizedError();
-                } else if (err.response.status === 422 || err.response.status === 400) {
-                    // Handle validation errors
-                    return {
-                        message: extractErrorMessages(err_response.message)
-                    };
-                } else if (err_response.success !== undefined && err_response.data !== undefined) {
-                    if (err_response.data.length > 0) {
-                        return { message: err_response.data.join(', ') }; // Join multiple messages if needed
-                    } else {
-                        return { message: err_response.message };
-                    }
+          console.error(err);
+      
+          if (err.response) {
+            const errResponse = err.response.data;
+            const statusCode = err.response.status;
+      
+            switch (statusCode) {
+              case 401:
+                return handleUnauthorizedError(); // Function to handle unauthorized access
+              case 403:
+                return { message: "Access Forbidden: You do not have permission to access this resource." };
+              case 422:
+              case 400:
+                return {
+                  message: extractErrorMessages(errResponse.message || "Validation failed."),
+                };
+              default:
+                if (errResponse.success !== undefined && errResponse.data) {
+                  return {
+                    message: Array.isArray(errResponse.data)
+                      ? errResponse.data.join(", ") // Handle multiple messages
+                      : errResponse.message || "An unknown error occurred.",
+                  };
                 }
             }
-
-            // Default error message 
-            return { message: err.message };
+          }
+      
+          // Default fallback error
+          return { message: err.message || "An unknown error occurred." };
         }
-    },
+      },
+      
     Put: async ({ url, hasToken, data = null }) => {
         try {
             const response = await axios.put(url, data, hasToken ? {

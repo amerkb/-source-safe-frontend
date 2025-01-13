@@ -7,8 +7,7 @@ import PanelBody from '../Panel/PanelBody'
 const GroupList = () => {
   return (
     <div>
-      <PanelHead title='My Groups'/>
-      <PanelBody content={<GroupTable/>} />
+     
 
 
       </div>
