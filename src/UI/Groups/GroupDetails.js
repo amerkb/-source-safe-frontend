@@ -216,8 +216,8 @@ const FilesSection = () => {
   const [newFile, setNewFile] = useState(null);
   const [fileIdForCheckOut, setFileIdForCheckOut] = useState(null);
   const [addFileModal, setAddFileModal] = useState(false);
-  const [addFileData, setAddFileData] = useState({ name: "", filePath: null, groupId: "1" });
   const { id, title } = useParams();
+  const [addFileData, setAddFileData] = useState({ name: "", filePath: null, groupId: id });
 
   const fetchFiles = async () => {
     setLoading(true);
@@ -249,7 +249,7 @@ const FilesSection = () => {
     try {
       // Define the API endpoint with query parameters
       const url = `http://localhost:8080/file/updateFile?fileId=${encodeURIComponent(fileId)}&requestStatus=${encodeURIComponent(newStatus)}&groupId=${encodeURIComponent(id)}`;
-  
+
       // Make the GET request
       const response = await fetch(url, {
         method: "GET",
@@ -258,21 +258,21 @@ const FilesSection = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to update file status.");
       }
-  
+
       const data = await response.json();
       console.log("Status updated successfully:", data);
-  
+
       fetchFiles();
     } catch (error) {
       console.error("Error updating file status:", error);
     }
   };
-  
-  
+
+
   const handleSendSelectedFiles = async () => {
     try {
       setLoading(true);
@@ -365,7 +365,7 @@ const FilesSection = () => {
     const match = filePath.match(/\.([0-9a-z]+)$/i);
     return match ? match[1] : ""; // Return the extension or an empty string
   };
-  const handleFileDelete = async (fileId, groupId) => {
+  const handleFileDelete = async (fileId) => {
     try {
       // Construct the API URL with query parameters
       const url = `http://localhost:8080/file/deleteFile?fileId=${fileId}&groupId=${id}`;
@@ -391,7 +391,7 @@ const FilesSection = () => {
     const formData = new FormData();
     formData.append("name", addFileData.name);
     formData.append("filePath", addFileData.filePath);
-    formData.append("groupId", addFileData.groupId);
+    formData.append("groupId", id);
 
     try {
       setLoading(true);
@@ -535,7 +535,7 @@ const FilesSection = () => {
                 </div>
               )}
               <button
-                onClick={() => handleFileDelete(file.id, file.groupId)} // Provide fileId and groupId
+                onClick={() => handleFileDelete(file.id)} // Provide fileId and groupId
                 className="px-4 py-2 rounded bg-red-500 text-white font-semibold shadow hover:bg-red-600 transition flex items-center"
               >
                 <FiTrash className="mr-2" /> Delete
