@@ -36,5 +36,9 @@ export const api_Routes = {
     User: {
         allUser: `${Host}/users/getUsers`,
         AddUser:`${Host}/groups/addMember`,
+    },
+    File: {
+        GetAllfile: `${Host}/file/getAccessibleFiles`,
+        Updatefile: `${Host}/file/updateFile`,
     }
 }

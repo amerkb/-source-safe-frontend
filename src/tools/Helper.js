@@ -139,72 +139,76 @@ export const Helper = {
     },
     Post: async ({ url, hasToken, data = null }) => {
         try {
-          const response = await axios.post(
-            url,
-            data,
-            hasToken
-              ? {
-                  headers: {
-                    Authorization: token(),
-                  },
-                }
-              : {}
-          );
-      
-          if (response.data.success && response.status === 200) {
-            return {
-              message: response.data.message,
-              response: response.data,
-            };
-          } else {
-            return {
-              message: response.data.message || "An unknown error occurred.",
-              response: response.data,
-            };
-          }
-        } catch (err) {
-          console.error(err);
-      
-          if (err.response) {
-            const errResponse = err.response.data;
-            const statusCode = err.response.status;
-      
-            switch (statusCode) {
-              case 401:
-                return handleUnauthorizedError(); // Function to handle unauthorized access
-              case 403:
-                return { message: "Access Forbidden: You do not have permission to access this resource." };
-              case 422:
-              case 400:
+            const response = await axios.post(
+                url,
+                data,
+                hasToken
+                    ? {
+                        headers: {
+                            Authorization: token(),
+                            "Content-Type": "application/json", // Ensure content type is JSON
+
+                        },
+                    }
+                    : {}
+            );
+
+            if (response.data.success && response.status === 200) {
                 return {
-                  message: extractErrorMessages(errResponse.message || "Validation failed."),
+                    message: response.data.message,
+                    response: response.data,
                 };
-              default:
-                if (errResponse.success !== undefined && errResponse.data) {
-                  return {
-                    message: Array.isArray(errResponse.data)
-                      ? errResponse.data.join(", ") // Handle multiple messages
-                      : errResponse.message || "An unknown error occurred.",
-                  };
+            } else {
+                return {
+                    message: response.data.message || "An unknown error occurred.",
+                    response: response.data,
+                };
+            }
+        } catch (err) {
+            console.error(err);
+
+            if (err.response) {
+                const errResponse = err.response.data;
+                const statusCode = err.response.status;
+
+                switch (statusCode) {
+                    case 401:
+                        return handleUnauthorizedError(); // Function to handle unauthorized access
+                    case 403:
+                        return { message: "Access Forbidden: You do not have permission to access this resource." };
+                    case 422:
+                    case 400:
+                        return {
+                            message: extractErrorMessages(errResponse.message || "Validation failed."),
+                        };
+                    default:
+                        if (errResponse.success !== undefined && errResponse.data) {
+                            return {
+                                message: Array.isArray(errResponse.data)
+                                    ? errResponse.data.join(", ") // Handle multiple messages
+                                    : errResponse.message || "An unknown error occurred.",
+                            };
+                        }
                 }
             }
-          }
-      
-          // Default fallback error
-          return { message: err.message || "An unknown error occurred." };
+
+            // Default fallback error
+            return { message: err.message || "An unknown error occurred." };
         }
-      },
-      
+    },
+
     Put: async ({ url, hasToken, data = null }) => {
         try {
             const response = await axios.put(url, data, hasToken ? {
                 headers: {
                     Authorization: token(),
-                    //  ApiKey: "acO+4JTx8lmZmOo4qZemnKS7JufhcyviuvUaz5VL7faQo60isZFx/sf7FbtNs1FlkLG03/HsIs+6odEwY/30HrST7JZaDsAmTMrvB0qm25LqxoZquKThjgW9S6NCX8lWWLhp6mUOCBfe86B0dcgEhe9SXgmFVqA8UvzZ+G+YC8Y="
+                    "Content-Type": "application/json",
+
                 }
             } : {
                 headers: {
-                    //  ApiKey: "acO+4JTx8lmZmOo4qZemnKS7JufhcyviuvUaz5VL7faQo60isZFx/sf7FbtNs1FlkLG03/HsIs+6odEwY/30HrST7JZaDsAmTMrvB0qm25LqxoZquKThjgW9S6NCX8lWWLhp6mUOCBfe86B0dcgEhe9SXgmFVqA8UvzZ+G+YC8Y="
+                    "Content-Type": "application/json",
+
                 }
             }
             )

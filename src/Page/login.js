@@ -31,6 +31,8 @@ function Login() {
 
       if (response) {
         localStorage.setItem("token", response.token); 
+        localStorage.setItem("name", response.name); 
+
         navigate("/Home"); 
         dispatch(setFiledLogin(false)); 
       } else {
